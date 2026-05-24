@@ -14,6 +14,10 @@ line_length = 120
 tab_width = 4
 bracket_spacing = false
 
+[profile.mantle]
+eth_rpc_url = "https://rpc.sepolia.mantle.xyz"
+chain_id = 5003
+
 [profile.ci]
 fuzz = { runs = 1000 }
 verbosity = 3

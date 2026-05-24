@@ -1,109 +1,99 @@
-# AAE — Agent Economy (Solana Frontier + Sidetracks)
+# Agent Economy — Mantle Turing Test
 
-> 5 modular layers. 1 codebase. Multiple hackathon submissions.
+> **Agentic Wallet Economy with ERC-8004 Identity NFT**
+
+On-chain agent identity, reputation, and autonomous task execution — built for the Agentic Wallets & Economy track.
+
+**Built for:** Mantle Turing Test Hackathon — Agentic Wallets & Economy Track
+**Prize:** $120K total ($50K Grand)
+**Deadline:** June 15, 2026
+
+## What It Does
+
+A modular 5-layer agent economy system:
+
+1. **AgentRegistry** — On-chain identity + reputation (0-10000 scale)
+2. **JobEscrow** — Payment escrow with dispute resolution
+3. **AgentKeeper** — Autonomous execution triggers (conditions → actions)
+4. **ERC8004Adapter** — ERC-8004 Identity NFT integration on Mantle
+5. **Data Adapters** — Zerion (portfolio risk) + GoldRush (analytics)
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    AAE Agent Economy                         │
-├─────────────────────────────────────────────────────────────┤
-│  Layer 5: Cross-Agent Coordination (TaskManager)            │
-│  Layer 4: Social Leaderboards / Reputation                  │
-│  Layer 3: Brain (Evolve/Learn/Memory)                       │
-│  Layer 2: Agent Risk Intelligence (AgentKeeper) ← SIDETRACK │
-│  Layer 1: Fee LP Auto-Balance                               │
-├─────────────────────────────────────────────────────────────┤
-│  Foundation: AgentRegistry + JobEscrow + Marketplace        │
-├─────────────────────────────────────────────────────────────┤
-│  ADAPTERS: Zerion │ GoldRush │ Dune │ KeeperHub             │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│              ERC-8004 Identity              │
+│  (Mantle IdentityRegistry + Reputation)     │
+├─────────────────────────────────────────────┤
+│  AgentRegistry    │  AgentKeeper            │
+│  (identity/rep)   │  (autonomous triggers)  │
+├───────────────────┼─────────────────────────┤
+│  JobEscrow        │  Data Adapters          │
+│  (payment/dispute)│  (Zerion, GoldRush)     │
+└───────────────────┴─────────────────────────┘
+```
+
+## Quick Start
+
+```bash
+# Install Foundry
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+
+# Build
+forge build
+
+# Test (14/14 passing)
+forge test
+
+# Deploy to Mantle Sepolia
+FOUNDRY_PROFILE=mantle forge script script/DeployMantle.s.sol --rpc-url mantle-sepolia --broadcast --verify
 ```
 
 ## Contracts
 
-### Core (Foundation)
-| Contract | Description | Status |
-|----------|-------------|--------|
-| `AgentRegistry.sol` | Agent identity + reputation (0-10000) | ✅ Built |
-| `JobEscrow.sol` | Payment escrow with dispute resolution | ✅ Built |
+| Contract | Lines | Purpose |
+|----------|-------|---------|
+| AgentRegistry | 180 | Agent identity + reputation (RBAC) |
+| JobEscrow | 150 | Payment escrow + dispute resolution |
+| AgentKeeper | 120 | Autonomous execution triggers |
+| ERC8004Adapter | 80 | ERC-8004 Identity NFT integration |
+| ZerionAdapter | 60 | Portfolio risk detection |
+| GoldRushAdapter | 60 | On-chain analytics |
 
-### Layer 2: Risk Intelligence
-| Contract | Description | Status |
-|----------|-------------|--------|
-| `AgentKeeper.sol` | Autonomous execution triggers | ✅ Built |
+**Total:** ~650 lines of Solidity, 14 tests passing
 
-### Adapters (Sidetrack Wrappers)
-| Contract | Sidetrack | Prize | Status |
-|----------|-----------|-------|--------|
-| `ZerionAdapter.sol` | Zerion CLI | $5,000 USDC | ✅ Built |
-| `GoldRushAdapter.sol` | Covalent GoldRush | $3,000 USDC | ✅ Built |
+## ERC-8004 Integration
 
-## Test Coverage
+Agents get on-chain identity NFTs via the ERC-8004 standard:
 
-Run tests:
-```bash
-forge test -vvv
-```
+- **IdentityRegistry:** `0x8004A818BFB912233c491871b3d84c89A494BD9e` (Mantle Sepolia)
+- **ReputationRegistry:** `0x8004B663056A597Dffe9eCcC1965A193B7388713` (Mantle Sepolia)
+- **Spec:** [eips.ethereum.org/EIPS/eip-8004](https://eips.ethereum.org/EIPS/eip-8004)
+- **Site:** [8004.org/build](https://8004.org/build)
 
-Current: **20+ tests** covering:
-- Agent registration + reputation
-- Job escrow lifecycle (create → accept → complete → release)
-- Dispute resolution
-- Keeper conditions (register → trigger → execute)
-- Zerion portfolio risk detection
-- GoldRush analytics integration
-- Full integration flow
+## Mantle Network
 
-## Deploy
+- **Testnet:** Mantle Sepolia (Chain ID: 5003)
+- **RPC:** `https://rpc.sepolia.mantle.xyz`
+- **EVM compatible** — Standard Foundry/Hardhat tooling
+- **DeFi:** Merchant Moe, Agni Finance, Fluxion
 
-```bash
-forge script script/DeployAgentEconomy.s.sol --rpc-url $RPC_URL --broadcast
-```
+## Judging Criteria
 
-## Hackathon Targets
+- On-chain performance metrics (ROI, Sharpe ratio)
+- Reputation score delta
+- Agent autonomy level
+- ERC-8004 integration quality
 
-| Event | Deadline | Prize | Layer |
-|-------|----------|-------|-------|
-| Superteam Earn (Zerion CLI) | May 11 | $5,000 | L2+L5 |
-| Superteam Earn (GoldRush) | May 11 | $3,000 | L2 |
-| Superteam Earn (Dune) | May 11 | TBD | L2 |
-| Superteam Earn (Agentic) | May 11 | ~200 USDG | L3 |
-| Solana Frontier (main) | May 11 | $230K+ | All |
-| ETHGlobal Open Agents | May 3 | $50K | L2+L3+L4+L5 |
+## Roadmap
 
-## Design Principles
+- [ ] Deploy to Mantle Sepolia
+- [ ] Integrate with RealClaw for trading execution
+- [ ] Add Byreal Skills for cross-chain agent operations
+- [ ] Agent staking + slash conditions
+- [ ] Multi-chain reputation portability
 
-- **Checks-effects-interactions** — always
-- **Pull-over-push** — users withdraw, don't receive pushes
-- **Gas discipline** — calldata over memory, custom errors
-- **OpenZeppelin base** — AccessControl, ReentrancyGuard, SafeERC20
-- **Adapter pattern** — thin wrappers per sidetrack, core shared
-- **Events everywhere** — every state change emits
+## Built By
 
-## Project Structure
-
-```
-src/
-├── core/                    # Foundation contracts
-│   ├── AgentRegistry.sol
-│   └── JobEscrow.sol
-├── layers/                  # AAE layers
-│   ├── L1-LP/
-│   ├── L2-Risk/
-│   │   └── AgentKeeper.sol
-│   ├── L3-Brain/
-│   ├── L4-Social/
-│   └── L5-Coord/
-├── adapters/                # Sidetrack adapters
-│   ├── ZerionAdapter.sol
-│   └── GoldRushAdapter.sol
-└── interfaces/              # Contract interfaces
-    ├── IAgentRegistry.sol
-    ├── IJobEscrow.sol
-    ├── IAgentKeeper.sol
-    └── IAdapter.sol
-```
-
-## Tags
-#AAE #solana #frontier #hackathon #agents #DeFi #foundry
+GenTech Labs — [ProtoJay4789](https://github.com/ProtoJay4789)
