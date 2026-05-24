@@ -32,7 +32,7 @@ contract ERC8004Adapter {
      * @param _metadataURI IPFS/URL pointing to agent metadata JSON
      */
     function registerWithIdentity(uint256 _agentId, string calldata _metadataURI) external {
-        require(agentToNFT[_agentId] == 0, "Identity already minted");
+        require(agentToNFT[_agentId] == address(0), "Identity already minted");
 
         // In production, this calls the Mantle IdentityRegistry
         // For hackathon demo, we track the mapping locally

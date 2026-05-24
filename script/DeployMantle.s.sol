@@ -10,6 +10,7 @@ import "../src/adapters/ERC8004Adapter.sol";
 contract DeployMantleEconomy is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        address oracle = vm.envAddress("ORACLE_ADDRESS");
         vm.startBroadcast(deployerPrivateKey);
 
         // Deploy core
